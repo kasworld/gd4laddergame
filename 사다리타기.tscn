@@ -36,6 +36,12 @@ theme = ExtResource("2_x1kds")
 layout_mode = 2
 size_flags_vertical = 3
 
+[node name="세로선들" type="Panel" parent="사다리들"]
+layout_mode = 2
+
+[node name="가로선들" type="Panel" parent="사다리들"]
+layout_mode = 2
+
 [node name="도착지점들" type="HBoxContainer" parent="."]
 layout_mode = 2
 theme = ExtResource("2_x1kds")
