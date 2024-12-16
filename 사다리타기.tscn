@@ -15,13 +15,17 @@ script = ExtResource("1_8q3j2")
 layout_mode = 2
 theme = ExtResource("2_x1kds")
 
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "사다리타기"
+
 [node name="참가자수" parent="HBoxContainer" instance=ExtResource("2_l0fvh")]
 layout_mode = 2
 theme = ExtResource("2_x1kds")
 
 [node name="시작단추" type="Button" parent="HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
 text = "시작하기"
 
 [node name="참가자들" type="HBoxContainer" parent="."]

@@ -3,7 +3,8 @@ extends VBoxContainer
 @onready var 참가자수 = $"HBoxContainer/참가자수"
 
 func _ready() -> void:
-	참가자수.init(0,"참가자수 ",48)
+	var fsize = preload("res://사다리타기.tres").default_font_size
+	참가자수.init(0,"참가자수 ",fsize)
 	참가자수.set_limits(2,true,4,30,true)
 	$"참가자들".custom_minimum_size.y = 참가자수.size.y/2
 	$"도착지점들".custom_minimum_size.y = 참가자수.size.y/2
