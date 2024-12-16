@@ -1,0 +1,46 @@
+[gd_scene load_steps=6 format=3 uid="uid://b7s7h31g61c17"]
+
+[ext_resource type="Script" path="res://사다리타기.gd" id="1_8q3j2"]
+[ext_resource type="PackedScene" uid="uid://dllxbmyyau3u5" path="res://int_edit/int_edit.tscn" id="2_l0fvh"]
+
+[sub_resource type="Theme" id="Theme_l3bje"]
+default_font_size = 80
+
+[sub_resource type="Theme" id="Theme_2urpu"]
+default_font_size = 80
+
+[sub_resource type="Theme" id="Theme_crbpd"]
+default_font_size = 80
+
+[node name="사다리타기" type="VBoxContainer"]
+offset_right = 1920.0
+offset_bottom = 1080.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_8q3j2")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme = SubResource("Theme_l3bje")
+
+[node name="참가자수" parent="HBoxContainer" instance=ExtResource("2_l0fvh")]
+layout_mode = 2
+
+[node name="시작단추" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "시작하기"
+
+[node name="참가자들" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme = SubResource("Theme_2urpu")
+
+[node name="사다리들" type="PanelContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="도착지점들" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme = SubResource("Theme_crbpd")
+
+[connection signal="value_changed" from="HBoxContainer/참가자수" to="." method="_on_참가자수_value_changed"]
