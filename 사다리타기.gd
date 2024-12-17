@@ -9,7 +9,7 @@ var 사다리만들기자료 :Array
 # Array[참가자수][참가자수*4][참가자번호:int*2]
 var 사다리풀이자료 :Array
 
-func 사다리자료_만들기()->void:
+func 사다리자료_만들기() -> void:
 	# 초기화
 	사다리만들기자료 = []
 	사다리풀이자료 = []
@@ -40,7 +40,7 @@ func _ready() -> void:
 	$"도착지점들".custom_minimum_size.y = 참가자수.size.y/2
 	참가자수변경()
 
-func 참가자수변경()->void:
+func 참가자수변경() -> void:
 	for n in $"참가자들".get_children():
 		$"참가자들".remove_child(n)
 	for n in $"도착지점들".get_children():
@@ -56,35 +56,49 @@ func 참가자수변경()->void:
 		$"도착지점들".add_child(도착지점)
 	사다리자료_만들기()
 	사다리문제.visible = false
+	사다리풀이.visible = false
 
-func 사다리문제그리기()->void:
+func 사다리문제그리기() -> void:
 	for n in 사다리문제.get_children():
 		사다리문제.remove_child(n)
 	var n = 참가자수.get_value()
+	var 간격x = $"사다리들".size.x / n
+	var 간격y = $"사다리들".size.y / n /4
+	var y1 = 0
+	var y2 = $"사다리들".size.y
+
 	for x in n:
-		var 세로줄 = 긴세로줄만들기(x, Color.YELLOW)
+		var 세로줄 = Line2D.new()
+		세로줄.default_color = Color.YELLOW
+		세로줄.width = 간격x/20
+		var xx = x*간격x+간격x/2
+		세로줄.points = [Vector2(xx,y1), Vector2(xx,y2)]
 		사다리문제.add_child(세로줄)
 
 	for y in n*4:
 		for x in n+1:
 			if 사다리만들기자료[x%n][y]:
-				var 가로줄 = 가로줄만들기(x,y,Color.GREEN)
+				var 가로줄 = Line2D.new()
+				가로줄.default_color = Color.GREEN
+				가로줄.width = 간격y/10
+				var x1 = x*간격x-간격x/2
+				var x2 = x*간격x+간격x/2
+				var yy = y*간격y+간격y/2
+				가로줄.points = [Vector2(x1,yy), Vector2(x2,yy)]
 				사다리문제.add_child(가로줄)
 
 	사다리문제.visible = true
 
-func 긴세로줄만들기(x :int, co :Color)->Line2D:
-	var n =  참가자수.get_value()
+func 사다리풀이그리기() -> void:
+	for n in 사다리문제.get_children():
+		사다리문제.remove_child(n)
+	var n = 참가자수.get_value()
 	var 간격x = $"사다리들".size.x / n
-	var 세로줄 = Line2D.new()
-	세로줄.default_color = co
-	세로줄.width = 간격x/20
-	var xx = x*간격x+간격x/2
-	var y1 = 0
-	var y2 = $"사다리들".size.y
-	세로줄.add_point(Vector2(xx,y1))
-	세로줄.add_point(Vector2(xx,y2))
-	return 세로줄
+	var 간격y = $"사다리들".size.y / n /4
+
+
+	사다리문제.visible = false
+	사다리풀이.visible = true
 
 func 세로줄만들기(x :int, y:int, co :Color)->Line2D:
 	var n =  참가자수.get_value()
@@ -100,7 +114,7 @@ func 세로줄만들기(x :int, y:int, co :Color)->Line2D:
 	세로줄.add_point(Vector2(xx,y2))
 	return 세로줄
 
-func 가로줄만들기(x :int, y:int, co :Color)->Line2D:
+func 가로줄만들기(x :int, y:int, co :Color) -> Line2D:
 	var n =  참가자수.get_value()
 	var 간격x = $"사다리들".size.x / n
 	var 간격y = $"사다리들".size.y / n /4
@@ -121,4 +135,4 @@ func _on_만들기단추_pressed() -> void:
 	사다리문제그리기()
 
 func _on_풀기단추_pressed() -> void:
-	pass # Replace with function body.
+	사다리풀이그리기()
