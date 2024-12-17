@@ -8,11 +8,13 @@ extends VBoxContainer
 var 사다리만들기자료 :Array
 # Array[참가자수][참가자수*4][참가자번호:int*2]
 var 사다리풀이자료 :Array
+var 참가자색 :Array = []
 
 func 사다리자료_만들기() -> void:
 	# 초기화
 	사다리만들기자료 = []
 	사다리풀이자료 = []
+	참가자색 = []
 	var n = 참가자수.get_value()
 	for i in n:
 		사다리만들기자료.append([])
@@ -20,6 +22,9 @@ func 사다리자료_만들기() -> void:
 		for j in n*4:
 			사다리만들기자료[i].append(false)
 			사다리풀이자료[i].append([])
+
+	for i in n:
+		참가자색.append(NamedColorList.color_list.pick_random())
 
 	# 문제 만들기
 	for y in n*4:
@@ -69,7 +74,7 @@ func 사다리문제그리기() -> void:
 
 	for x in n:
 		var 세로줄 = Line2D.new()
-		세로줄.default_color = Color.YELLOW
+		세로줄.default_color = 참가자색[x][0]
 		세로줄.width = 간격x/20
 		var xx = x*간격x+간격x/2
 		세로줄.points = [Vector2(xx,y1), Vector2(xx,y2)]
@@ -128,7 +133,7 @@ func 가로줄만들기(x :int, y:int, co :Color) -> Line2D:
 	가로줄.add_point(Vector2(x2,yy))
 	return 가로줄
 
-func _on_참가자수_value_changed(idx: int) -> void:
+func _on_참가자수_value_changed(_idx: int) -> void:
 	참가자수변경()
 
 func _on_만들기단추_pressed() -> void:
