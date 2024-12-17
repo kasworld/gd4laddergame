@@ -4,6 +4,21 @@ extends VBoxContainer
 @onready var 세로선들 = $"사다리들/세로선들"
 @onready var 가로선들 = $"사다리들/가로선들"
 
+# Array[참가자수][참가자수*4]Bool
+var 사다리만들기자료 :Array
+# Array[참가자수][참가자수*4][참가자번호:int*2]
+var 사다리풀이자료 :Array
+
+func 사다리자료_초기화()->void:
+	사다리만들기자료 = []
+	사다리풀이자료 = []
+	var n = 참가자수.get_value()
+	for i in n:
+		사다리만들기자료.append([])
+		사다리풀이자료.append([])
+		for j in n*4:
+			사다리만들기자료[i].append(false)
+			사다리풀이자료[i].append([])
 
 func _ready() -> void:
 	var fsize = preload("res://사다리타기.tres").default_font_size
@@ -27,8 +42,6 @@ func 참가자수변경()->void:
 		도착지점.text = "도착%d" % [i+1]
 		도착지점.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		$"도착지점들".add_child(도착지점)
-	세로선만들기()
-	가로선만들기()
 
 func 세로선만들기()->void:
 	for n in 세로선들.get_children():
@@ -45,8 +58,6 @@ func 세로선만들기()->void:
 		세로줄.add_point(Vector2(i*간격+간격/2,y2))
 		세로선들.add_child(세로줄)
 
-func _on_참가자수_value_changed(idx: int) -> void:
-	참가자수변경()
 
 func 가로선만들기()->void:
 	for n in 가로선들.get_children():
@@ -67,3 +78,13 @@ func 가로선만들기()->void:
 			가로줄.add_point(Vector2(x*간격x+간격x/2,y*간격y+간격y/2))
 			가로선들.add_child(가로줄)
 			선만듬 = true
+
+func _on_참가자수_value_changed(idx: int) -> void:
+	참가자수변경()
+
+func _on_만들기단추_pressed() -> void:
+	세로선만들기()
+	가로선만들기()
+
+func _on_풀기단추_pressed() -> void:
+	pass # Replace with function body.

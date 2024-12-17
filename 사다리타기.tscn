@@ -24,9 +24,13 @@ text = "사다리타기"
 layout_mode = 2
 theme = ExtResource("2_x1kds")
 
-[node name="시작단추" type="Button" parent="HBoxContainer"]
+[node name="만들기단추" type="Button" parent="HBoxContainer"]
 layout_mode = 2
-text = "시작하기"
+text = "사다리만들기"
+
+[node name="풀기단추" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+text = "사다리타기"
 
 [node name="참가자들" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -40,6 +44,7 @@ size_flags_vertical = 3
 layout_mode = 2
 
 [node name="가로선들" type="Panel" parent="사다리들"]
+self_modulate = Color(1, 1, 1, 0.572549)
 layout_mode = 2
 
 [node name="도착지점들" type="HBoxContainer" parent="."]
@@ -47,3 +52,5 @@ layout_mode = 2
 theme = ExtResource("2_x1kds")
 
 [connection signal="value_changed" from="HBoxContainer/참가자수" to="." method="_on_참가자수_value_changed"]
+[connection signal="pressed" from="HBoxContainer/만들기단추" to="." method="_on_만들기단추_pressed"]
+[connection signal="pressed" from="HBoxContainer/풀기단추" to="." method="_on_풀기단추_pressed"]
