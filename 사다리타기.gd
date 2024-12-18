@@ -83,8 +83,7 @@ func 사다리문제그리기() -> void:
 		var 세로줄 = Line2D.new()
 		세로줄.default_color = 참가자색[x]
 		세로줄.width = 간격x/20
-		var xx = x*간격x+간격x/2
-		세로줄.points = [Vector2(xx,y1), Vector2(xx,y2)]
+		세로줄.points = [세로줄위치(x,0),세로줄위치(x,n*4)]
 		사다리문제.add_child(세로줄)
 
 	for y in n*4:
@@ -93,10 +92,7 @@ func 사다리문제그리기() -> void:
 				var 가로줄 = Line2D.new()
 				가로줄.default_color = Color.GREEN
 				가로줄.width = 간격y/10
-				var x1 = x*간격x-간격x/2
-				var x2 = x*간격x+간격x/2
-				var yy = y*간격y+간격y/2
-				가로줄.points = [Vector2(x1,yy), Vector2(x2,yy)]
+				가로줄.points = [가로줄위치(x,y,0), 가로줄위치(x+1,y,0)]
 				사다리문제.add_child(가로줄)
 
 	사다리문제.visible = true
@@ -106,9 +102,8 @@ func 사다리풀이그리기() -> void:
 	for n in 사다리풀이.get_children():
 		사다리풀이.remove_child(n)
 	var n = 참가자수.get_value()
-	var 간격x = $"사다리들".size.x / n
-	var 간격y = $"사다리들".size.y / n /4
-	var shift = 간격y/10 *2
+	var 간격 = 사다리간격()
+	var shift = 간격.y/10 *2
 
 	for y in n*4:
 		for x in n+1:
@@ -122,32 +117,32 @@ func 사다리풀이그리기() -> void:
 	#사다리문제.visible = false
 	사다리풀이.visible = true
 
+func 사다리간격() -> Vector2:
+	var n = 참가자수.get_value()
+	return Vector2($"사다리들".size.x / n, $"사다리들".size.y / n / 4)
+
+func 세로줄위치(x :int, y :int)->Vector2:
+	var 간격 = 사다리간격()
+	return Vector2(x * 간격.x +간격.x/2, y * 간격.y)
+
+func 가로줄위치(x :int, y :int, shift :int)->Vector2:
+	var 간격 = 사다리간격()
+	return Vector2(x * 간격.x -간격.x/2, y * 간격.y + 간격.y/2 + shift)
+
 func 세로줄만들기(x :int, y:int, co :Color)->Line2D:
-	var n =  참가자수.get_value()
-	var 간격x = $"사다리들".size.x / n
-	var 간격y = $"사다리들".size.y / n /4
+	var 간격 = 사다리간격()
 	var 세로줄 = Line2D.new()
 	세로줄.default_color = co
-	세로줄.width = 간격x/10
-	var xx = x*간격x+간격x/2
-	var y1 = y*간격y
-	var y2 = y*간격y+간격y
-	세로줄.add_point(Vector2(xx,y1))
-	세로줄.add_point(Vector2(xx,y2))
+	세로줄.width = 간격.x/10
+	세로줄.points = [ 세로줄위치(x,y), 세로줄위치(x,y+1)]
 	return 세로줄
 
 func 가로줄만들기(x :int, y:int, co :Color, shift :int) -> Line2D:
-	var n =  참가자수.get_value()
-	var 간격x = $"사다리들".size.x / n
-	var 간격y = $"사다리들".size.y / n /4
+	var 간격 = 사다리간격()
 	var 가로줄 = Line2D.new()
 	가로줄.default_color = co
-	가로줄.width = 간격y/10
-	var x1 = x*간격x-간격x/2
-	var x2 = x*간격x+간격x/2
-	var yy = y*간격y+간격y/2 + shift
-	가로줄.add_point(Vector2(x1,yy))
-	가로줄.add_point(Vector2(x2,yy))
+	가로줄.width = 간격.y/10
+	가로줄.points = [ 가로줄위치(x,y,shift), 가로줄위치(x+1,y,shift)]
 	return 가로줄
 
 func _on_참가자수_value_changed(_idx: int) -> void:
