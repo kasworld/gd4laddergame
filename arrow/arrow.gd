@@ -1,6 +1,13 @@
 extends Node2D
 class_name Arrow
 
+var wing_rate :float = 0.2
+var wing_rotate :float = PI/6
+
+func init_wing(rate :float, rot :float ) -> void:
+	wing_rate = rate
+	wing_rotate = rot
+
 func init_vector(vt :Vector2, co :Color, w :float)->Arrow:
 	return init_2_point(Vector2.ZERO, vt, co, w)
 
@@ -16,9 +23,9 @@ func init_2_point(p1 :Vector2, p2 :Vector2, co :Color, w :float)->Arrow:
 
 func set_points(p1 :Vector2, p2 :Vector2):
 	$CenterLine.points = [p1,p2]
-	var p3 = ((p1-p2)*0.2).rotated(PI/6) + p2
+	var p3 = ((p1-p2)*wing_rate).rotated(wing_rotate) + p2
 	$LeftLine.points = [p2,p3]
-	var p4 = ((p1-p2)*0.2).rotated(-PI/6) + p2
+	var p4 = ((p1-p2)*wing_rate).rotated(-wing_rotate) + p2
 	$RightLine.points = [p2,p4]
 
 func set_color(co :Color):
