@@ -106,7 +106,6 @@ func 사다리풀이그리기() -> void:
 	var shift = Vector2(0,2 * 간격.y/10)
 	for y in n*4:
 		for x in n+1:
-
 			var 참가번호 = 사다리풀이자료[x%n][y][0]
 			if  참가번호 < 0:
 				continue
@@ -114,17 +113,19 @@ func 사다리풀이그리기() -> void:
 				# 첫 세로줄 그리기
 			참가번호 = x % n
 			var 세로줄 = 화살표.instantiate()
+			세로줄.init_wing(0.3)
 			세로줄.init_2_point(세로줄위치(x,y), 세로줄위치(x,y+1)-shift,참가자색[참가번호],간격.x/10/10)
 			사다리풀이.add_child(세로줄)
 
+			참가번호 = 사다리풀이자료[x%n][y][0]
 			var 가로줄 = 화살표.instantiate()
-			가로줄.init_wing(0.1)
+			가로줄.init_wing(0.05)
 			가로줄.init_2_point(가로줄위치(x,y)-shift, 가로줄위치(x+1,y)-shift, 참가자색[참가번호],간격.y/10)
 			사다리풀이.add_child(가로줄)
 
 			참가번호 = 사다리풀이자료[x%n][y][1]
 			가로줄 = 화살표.instantiate()
-			가로줄.init_wing(0.1)
+			가로줄.init_wing(0.05)
 			가로줄.init_2_point(가로줄위치(x+1,y)+shift, 가로줄위치(x,y)+shift,참가자색[참가번호],간격.y/10)
 			사다리풀이.add_child(가로줄)
 
