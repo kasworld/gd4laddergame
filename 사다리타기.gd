@@ -117,12 +117,14 @@ func 사다리풀이그리기() -> void:
 			사다리풀이.add_child(세로줄)
 
 			var 가로줄 = 화살표.instantiate()
+			가로줄.init_wing(0.1)
 			var shift = -2 * 간격.y/10
 			가로줄.init_2_point(가로줄위치(x,y,shift), 가로줄위치(x+1,y,shift),참가자색[참가번호],간격.y/10)
 			사다리풀이.add_child(가로줄)
 
 			참가번호 = 사다리풀이자료[x%n][y][1]
 			가로줄 = 화살표.instantiate()
+			가로줄.init_wing(0.1)
 			shift = 2 * 간격.y/10
 			가로줄.init_2_point(가로줄위치(x+1,y,shift), 가로줄위치(x,y,shift),참가자색[참가번호],간격.y/10)
 			사다리풀이.add_child(가로줄)

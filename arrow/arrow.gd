@@ -4,7 +4,7 @@ class_name Arrow
 var wing_rate :float = 0.2
 var wing_rotate :float = PI/6
 
-func init_wing(rate :float, rot :float ) -> void:
+func init_wing(rate :float, rot :float = PI/6 ) -> void:
 	wing_rate = rate
 	wing_rotate = rot
 
