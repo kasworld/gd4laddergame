@@ -17,34 +17,40 @@ func 사다리자료_만들기() -> void:
 	사다리만들기자료 = []
 	사다리풀이자료 = []
 	참가자색 = []
-	var n = 참가자수.get_value()
-	for i in n:
+	var 칸수 = 사다리칸수()
+	for i in 칸수.x:
 		사다리만들기자료.append([])
 		사다리풀이자료.append([])
-		for j in n*4:
+		for j in 칸수.y:
 			사다리만들기자료[i].append(false)
 			사다리풀이자료[i].append([-1,-1])
 
-	for i in n:
+	for i in 칸수.x:
 		참가자색.append(NamedColorList.color_list.pick_random()[0])
 
 	# 문제 만들기
-	for y in n*4:
-		for x in n:
+	for y in 칸수.y:
+		for x in 칸수.x:
 			if randf() < 0.5:
 				continue
-			if 사다리만들기자료[(x-1+n)%n][y] or 사다리만들기자료[(x+1)%n][y]:
+			if 사다리만들기자료[(x-1+칸수.x)%칸수.x][y] or 사다리만들기자료[(x+1)%칸수.x][y]:
 				continue
 			사다리만들기자료[x][y] = true
 
 	# 풀이 만들기
-	for y in n*4:
-		for x in n:
-			if 사다리만들기자료[x][y] != true:
+	# 각 줄을 순서대로 타고
+	for 참가자번호 in 칸수.x:
+		var 현재줄번호 = 참가자번호
+		# 아래로 내려가면서 좌우로 이동
+		for y in 칸수.y:
+			if 사다리만들기자료[현재줄번호][y] == true:
+				# 왼쪽으로 한칸 이동
+				사다리풀이자료[현재줄번호][y][1] = 참가자번호
 				continue
-			# TODO 임시로 랜덤 참가번호를 부여한다.
-			사다리풀이자료[x][y][0] = randi_range(0,n-1)
-			사다리풀이자료[x][y][1] = randi_range(0,n-1)
+			if 사다리만들기자료[(현재줄번호+1)%칸수.x][y] == true:
+				# 오른쪽으로 한칸 이동
+				사다리풀이자료[현재줄번호][y][0] = 참가자번호
+				continue
 
 func _ready() -> void:
 	var fsize = preload("res://사다리타기.tres").default_font_size
@@ -75,19 +81,19 @@ func 참가자수변경() -> void:
 func 사다리문제그리기() -> void:
 	for n in 사다리문제.get_children():
 		사다리문제.remove_child(n)
-	var n = 참가자수.get_value()
+	var 칸수 = 사다리칸수()
 	var 간격 = 사다리간격()
 
-	for x in n:
+	for x in 칸수.x:
 		var 세로줄 = Line2D.new()
 		세로줄.default_color = 참가자색[x]
 		세로줄.width = 간격.x/20
-		세로줄.points = [세로줄위치(x,0),세로줄위치(x,n*4)]
+		세로줄.points = [세로줄위치(x,0),세로줄위치(x,칸수.y)]
 		사다리문제.add_child(세로줄)
 
-	for y in n*4:
-		for x in n+1:
-			if 사다리만들기자료[x%n][y]:
+	for y in 칸수.y:
+		for x in 칸수.x+1:
+			if 사다리만들기자료[x%칸수.x][y]:
 				var 가로줄 = Line2D.new()
 				가로줄.default_color = Color.GREEN
 				가로줄.width = 간격.y/10
@@ -100,38 +106,41 @@ func 사다리문제그리기() -> void:
 func 사다리풀이그리기() -> void:
 	for n in 사다리풀이.get_children():
 		사다리풀이.remove_child(n)
-	var n = 참가자수.get_value()
+	var 칸수 = 사다리칸수()
 	var 간격 = 사다리간격()
 
 	var shift = Vector2(0,2 * 간격.y/10)
-	for y in n*4:
-		for x in n+1:
-			var 참가번호 = 사다리풀이자료[x%n][y][0]
+	for y in 칸수.y:
+		for x in 칸수.x+1:
+			var 참가번호 = 사다리풀이자료[x%칸수.x][y][0]
 			if  참가번호 < 0:
 				continue
 			#if y == 0:
 				# 첫 세로줄 그리기
-			참가번호 = x % n
-			var 세로줄 = 화살표.instantiate()
-			세로줄.init_2_point(세로줄위치(x,y), 세로줄위치(x,y+1)-shift, 참가자색[참가번호], 간격.x/10/10, 0.3)
-			사다리풀이.add_child(세로줄)
+			#참가번호 = x % n
+			#var 세로줄 = 화살표.instantiate()
+			#세로줄.init_2_point(세로줄위치(x,y), 세로줄위치(x,y+1)-shift, 참가자색[참가번호], 간격.x/10/10, 0.3)
+			#사다리풀이.add_child(세로줄)
 
-			참가번호 = 사다리풀이자료[x%n][y][0]
+			참가번호 = 사다리풀이자료[x%칸수.x][y][0]
 			var 가로줄 = 화살표.instantiate()
 			가로줄.init_2_point(가로줄위치(x,y)-shift, 가로줄위치(x+1,y)-shift, 참가자색[참가번호], 간격.y/10, 0.05)
 			사다리풀이.add_child(가로줄)
 
-			참가번호 = 사다리풀이자료[x%n][y][1]
+			참가번호 = 사다리풀이자료[x%칸수.x][y][1]
 			가로줄 = 화살표.instantiate()
 			가로줄.init_2_point(가로줄위치(x+1,y)+shift, 가로줄위치(x,y)+shift, 참가자색[참가번호], 간격.y/10, 0.05)
 			사다리풀이.add_child(가로줄)
 
-	사다리문제.visible = false
+	#사다리문제.visible = false
 	사다리풀이.visible = true
 
+func 사다리칸수() -> Vector2i:
+	return Vector2i(참가자수.get_value(), 참가자수.get_value() *4)
+
 func 사다리간격() -> Vector2:
-	var n = 참가자수.get_value()
-	return Vector2($"사다리들".size.x / n, $"사다리들".size.y / n / 4)
+	var 칸수 = 사다리칸수()
+	return Vector2($"사다리들".size.x / 칸수.x, $"사다리들".size.y / 칸수.y)
 
 func 세로줄위치(x :int, y :int)->Vector2:
 	var 간격 = 사다리간격()
