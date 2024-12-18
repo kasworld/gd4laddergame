@@ -40,11 +40,10 @@ theme = ExtResource("2_x1kds")
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="문제" type="Panel" parent="사다리들"]
+[node name="문제" type="Control" parent="사다리들"]
 layout_mode = 2
 
-[node name="풀이" type="Panel" parent="사다리들"]
-visible = false
+[node name="풀이" type="Control" parent="사다리들"]
 layout_mode = 2
 
 [node name="도착지점들" type="HBoxContainer" parent="."]

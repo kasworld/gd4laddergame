@@ -102,16 +102,24 @@ func 사다리풀이그리기() -> void:
 		사다리풀이.remove_child(n)
 	var n = 참가자수.get_value()
 	var 간격 = 사다리간격()
-	var shift = 간격.y/10 *2
 
 	for y in n*4:
 		for x in n+1:
-			for i in 사다리풀이자료[x%n][y].size():
-				var 참가번호 = 사다리풀이자료[x%n][y][i]
-				if  참가번호 < 0:
-					continue
-				var 가로줄 = 가로줄만들기(x,y, 참가자색[참가번호], shift *i -shift/2)
-				사다리풀이.add_child(가로줄)
+			var 참가번호 = 사다리풀이자료[x%n][y][0]
+			if  참가번호 < 0:
+				continue
+			var 가로줄 = 화살표.instantiate()
+			var shift = -2 * 간격.y/10
+			가로줄.init_2_point(가로줄위치(x,y,shift), 가로줄위치(x+1,y,shift),참가자색[참가번호],간격.y/10)
+			#var 가로줄 = 가로줄만들기(x,y, 참가자색[참가번호], shift *i -shift/2)
+			사다리풀이.add_child(가로줄)
+
+			참가번호 = 사다리풀이자료[x%n][y][1]
+			가로줄 = 화살표.instantiate()
+			shift = 2 * 간격.y/10
+			가로줄.init_2_point(가로줄위치(x+1,y,shift), 가로줄위치(x,y,shift),참가자색[참가번호],간격.y/10)
+			#var 가로줄 = 가로줄만들기(x,y, 참가자색[참가번호], shift *i -shift/2)
+			사다리풀이.add_child(가로줄)
 
 	#사다리문제.visible = false
 	사다리풀이.visible = true
