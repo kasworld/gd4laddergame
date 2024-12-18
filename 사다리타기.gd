@@ -1,5 +1,7 @@
 extends VBoxContainer
 
+var 화살표 = preload("res://arrow/arrow.tscn")
+
 @onready var 참가자수 = $"HBoxContainer/참가자수"
 @onready var 사다리문제 = $"사다리들/문제"
 @onready var 사다리풀이 = $"사다리들/풀이"
@@ -74,15 +76,12 @@ func 사다리문제그리기() -> void:
 	for n in 사다리문제.get_children():
 		사다리문제.remove_child(n)
 	var n = 참가자수.get_value()
-	var 간격x = $"사다리들".size.x / n
-	var 간격y = $"사다리들".size.y / n /4
-	var y1 = 0
-	var y2 = $"사다리들".size.y
+	var 간격 = 사다리간격()
 
 	for x in n:
 		var 세로줄 = Line2D.new()
 		세로줄.default_color = 참가자색[x]
-		세로줄.width = 간격x/20
+		세로줄.width = 간격.x/20
 		세로줄.points = [세로줄위치(x,0),세로줄위치(x,n*4)]
 		사다리문제.add_child(세로줄)
 
@@ -91,7 +90,7 @@ func 사다리문제그리기() -> void:
 			if 사다리만들기자료[x%n][y]:
 				var 가로줄 = Line2D.new()
 				가로줄.default_color = Color.GREEN
-				가로줄.width = 간격y/10
+				가로줄.width = 간격.y/10
 				가로줄.points = [가로줄위치(x,y,0), 가로줄위치(x+1,y,0)]
 				사다리문제.add_child(가로줄)
 
