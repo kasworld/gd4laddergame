@@ -46,7 +46,9 @@ func 사다리자료_만들기() -> void:
 		for x in 칸수.x:
 			if randf() < 0.5:
 				continue
-			if 사다리자료[(x-1+칸수.x)%칸수.x][y].왼쪽연결길 or 사다리자료[(x+1)%칸수.x][y].왼쪽연결길:
+			if 사다리자료[(x-1+칸수.x)%칸수.x][y].왼쪽연결길 == true or 사다리자료[(x+1)%칸수.x][y].왼쪽연결길 == true:
+				continue
+			if y > 0 and 사다리자료[x][y-1].왼쪽연결길 == true:
 				continue
 			사다리자료[x][y].왼쪽연결길 = true
 
@@ -152,7 +154,7 @@ func 사다리풀이그리기() -> void:
 	사다리풀이.visible = true
 
 func 사다리칸수() -> Vector2i:
-	return Vector2i(참가자수.get_value(), 참가자수.get_value() )
+	return Vector2i(참가자수.get_value(), 참가자수.get_value()*4 )
 
 func 사다리간격() -> Vector2:
 	var 칸수 = 사다리칸수()
