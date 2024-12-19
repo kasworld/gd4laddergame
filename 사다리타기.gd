@@ -99,11 +99,16 @@ func 참가자수변경() -> void:
 		도착지점.text = "도착%d" % [i+1]
 		도착지점.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		$"도착지점들".add_child(도착지점)
-	사다리자료_만들기()
 	사다리문제.visible = false
 	사다리풀이.visible = false
 
 func 사다리문제그리기() -> void:
+	사다리자료_만들기()
+	for i in $"참가자들".get_child_count():
+		$"참가자들".get_child(i).editable = false
+		$"도착지점들".get_child(i).editable = false
+		$"참가자들".get_child(i).modulate = 참가자색[i]
+
 	for n in 사다리문제.get_children():
 		사다리문제.remove_child(n)
 	var 칸수 = 사다리칸수()
@@ -129,10 +134,15 @@ func 사다리문제그리기() -> void:
 	사다리풀이.visible = false
 
 func 사다리풀이그리기() -> void:
-	for n in 사다리풀이.get_children():
-		사다리풀이.remove_child(n)
 	var 칸수 = 사다리칸수()
 	var 간격 = 사다리간격()
+
+	for i in 칸수.x:
+		$"도착지점들".get_child(참가자위치[i]).text += "<-" + $"참가자들".get_child(i).text
+		$"도착지점들".get_child(참가자위치[i]).modulate = 참가자색[i]
+
+	for n in 사다리풀이.get_children():
+		사다리풀이.remove_child(n)
 
 	var shift = Vector2(0, 간격.y/10)
 	for y in 칸수.y:
