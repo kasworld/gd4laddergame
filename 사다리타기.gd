@@ -138,7 +138,9 @@ func 사다리풀이그리기() -> void:
 	var 간격 = 사다리간격()
 
 	for i in 칸수.x:
+		var s = $"도착지점들".get_child(참가자위치[i]).text
 		$"도착지점들".get_child(참가자위치[i]).text += "<-" + $"참가자들".get_child(i).text
+		$"참가자들".get_child(i).text += "->" + s
 		$"도착지점들".get_child(참가자위치[i]).modulate = 참가자색[i]
 
 	for n in 사다리풀이.get_children():
