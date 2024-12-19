@@ -6,48 +6,46 @@ var 화살표 = preload("res://arrow/arrow.tscn")
 @onready var 사다리문제 = $"사다리들/문제"
 @onready var 사다리풀이 = $"사다리들/풀이"
 
-# Array[참가자수][참가자수*4]Bool
-var 사다리만들기자료 :Array
-# Array[참가자수][참가자수*4][참가자번호:int*2]
-var 사다리풀이자료 :Array
-var 참가자색 :Array = []
+class 사다리구성자료:
+	var 왼쪽연결길 :bool # 존재여부
+	var 왼쪽가는길 :int # 참가자번호
+	var 오른쪽가는길 :int # 참가자번호
+	func _init() -> void:
+		왼쪽연결길 = false # 없음
+		왼쪽가는길 = -1 # 미사용
+		오른쪽가는길 = -1 # 미사용
+	func _to_string() -> String:
+		return "[%s %d %d]" % [왼쪽연결길,왼쪽가는길,오른쪽가는길]
 
-func 만들기자료_보기():
+# Array[참가자수][참가자수*4]사다리구성자료
+var 사다리자료 :Array
+var 참가자색 :PackedColorArray = []
+
+func 사다리자료_보기():
 	var 칸수 = 사다리칸수()
 	for y in 칸수.y:
-		print(사다리만들기자료[y])
-
-func 풀이자료_보기():
-	var 칸수 = 사다리칸수()
-	for y in 칸수.y:
-		print(사다리풀이자료[y])
+		print(사다리자료[y])
 
 func 사다리자료_만들기() -> void:
 	# 초기화
-	사다리만들기자료 = []
-	사다리풀이자료 = []
-	참가자색 = []
 	var 칸수 = 사다리칸수()
-	for i in 칸수.x:
-		사다리만들기자료.append([])
-		사다리풀이자료.append([])
-		for j in 칸수.y:
-			사다리만들기자료[i].append(false)
-			사다리풀이자료[i].append([-1,-1])
-
+	참가자색 = []
 	for i in 칸수.x:
 		참가자색.append(NamedColorList.color_list.pick_random()[0])
+	사다리자료 = []
+	for i in 칸수.x:
+		사다리자료.append([])
+		for j in 칸수.y:
+			사다리자료[i].append(사다리구성자료.new())
 
 	# 문제 만들기
 	for y in 칸수.y:
 		for x in 칸수.x:
 			if randf() < 0.5:
 				continue
-			if 사다리만들기자료[(x-1+칸수.x)%칸수.x][y] or 사다리만들기자료[(x+1)%칸수.x][y]:
+			if 사다리자료[(x-1+칸수.x)%칸수.x][y].왼쪽연결길 or 사다리자료[(x+1)%칸수.x][y].왼쪽연결길:
 				continue
-			사다리만들기자료[x][y] = true
-
-	만들기자료_보기()
+			사다리자료[x][y].왼쪽연결길 = true
 
 	# 풀이 만들기
 	# 각 줄을 순서대로 타고
@@ -55,18 +53,18 @@ func 사다리자료_만들기() -> void:
 		var 현재줄번호 = 참가자번호
 		# 아래로 내려가면서 좌우로 이동
 		for y in 칸수.y:
-			if 사다리만들기자료[현재줄번호][y] == true:
+			if 사다리자료[현재줄번호][y].왼쪽연결길 == true:
 				# 왼쪽으로 한칸 이동
-				사다리풀이자료[현재줄번호][y][0] = 참가자번호
+				사다리자료[현재줄번호][y].왼쪽가는길 = 참가자번호
 				현재줄번호 = (현재줄번호-1 + 칸수.x) %칸수.x
 				continue
-			if 사다리만들기자료[(현재줄번호+1)%칸수.x][y] == true:
+			if 사다리자료[(현재줄번호+1)%칸수.x][y].왼쪽연결길 == true:
 				# 오른쪽으로 한칸 이동
-				사다리풀이자료[현재줄번호][y][1] = 참가자번호
+				사다리자료[현재줄번호][y].오른쪽가는길 = 참가자번호
 				현재줄번호 = (현재줄번호+1) % 칸수.x
 				continue
 
-	풀이자료_보기()
+	사다리자료_보기()
 
 func _ready() -> void:
 	var fsize = preload("res://사다리타기.tres").default_font_size
@@ -109,7 +107,7 @@ func 사다리문제그리기() -> void:
 
 	for y in 칸수.y:
 		for x in 칸수.x+1:
-			if 사다리만들기자료[x%칸수.x][y]:
+			if 사다리자료[x%칸수.x][y]:
 				var 가로줄 = Line2D.new()
 				가로줄.default_color = Color.WHITE
 				가로줄.width = 1 #간격.y/10
@@ -128,7 +126,7 @@ func 사다리풀이그리기() -> void:
 	var shift = Vector2(0, 간격.y/10)
 	for y in 칸수.y:
 		for x in 칸수.x+1:
-			var 참가번호 = 사다리풀이자료[x%칸수.x][y][0]
+			var 참가번호 = 사다리자료[x%칸수.x][y].왼쪽가는길
 			if  참가번호 < 0:
 				continue
 			#if y == 0:
@@ -138,12 +136,12 @@ func 사다리풀이그리기() -> void:
 			#세로줄.init_2_point(세로줄위치(x,y), 세로줄위치(x,y+1)-shift, 참가자색[참가번호], 간격.x/10/10, 0.3)
 			#사다리풀이.add_child(세로줄)
 
-			참가번호 = 사다리풀이자료[x%칸수.x][y][0] # 왼쪽
+			참가번호 = 사다리자료[x%칸수.x][y].왼쪽가는길
 			var 가로줄 = 화살표.instantiate()
 			가로줄.init_2_point(가로줄위치(x+1,y)-shift, 가로줄위치(x,y)-shift, 참가자색[참가번호], 간격.y/10/2, 0.05)
 			사다리풀이.add_child(가로줄)
 
-			참가번호 = 사다리풀이자료[x%칸수.x][y][1] # 오른쪽
+			참가번호 = 사다리자료[x%칸수.x][y].오른쪽가는길
 			가로줄 = 화살표.instantiate()
 			가로줄.init_2_point(가로줄위치(x,y)+shift, 가로줄위치(x+1,y)+shift, 참가자색[참가번호], 간격.y/10/2, 0.05)
 			사다리풀이.add_child(가로줄)
