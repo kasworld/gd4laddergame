@@ -107,7 +107,7 @@ func 사다리문제그리기() -> void:
 
 	for y in 칸수.y:
 		for x in 칸수.x+1:
-			if 사다리자료[x%칸수.x][y]:
+			if 사다리자료[x%칸수.x][y].왼쪽연결길:
 				var 가로줄 = Line2D.new()
 				가로줄.default_color = Color.WHITE
 				가로줄.width = 1 #간격.y/10
