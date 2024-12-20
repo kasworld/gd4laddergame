@@ -32,27 +32,37 @@ text = "사다리만들기"
 layout_mode = 2
 text = "사다리타기"
 
-[node name="참가자들" type="HBoxContainer" parent="."]
+[node name="참가자_Scroll" type="ScrollContainer" parent="."]
 layout_mode = 2
+
+[node name="참가자들" type="HBoxContainer" parent="참가자_Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme = ExtResource("2_x1kds")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="사다리_Scroll" type="ScrollContainer" parent="."]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="사다리들" type="PanelContainer" parent="ScrollContainer"]
+[node name="사다리들" type="PanelContainer" parent="사다리_Scroll"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="문제" type="Control" parent="ScrollContainer/사다리들"]
+[node name="문제" type="Control" parent="사다리_Scroll/사다리들"]
 layout_mode = 2
 
-[node name="풀이" type="Control" parent="ScrollContainer/사다리들"]
+[node name="풀이" type="Control" parent="사다리_Scroll/사다리들"]
 layout_mode = 2
 
-[node name="도착지점들" type="HBoxContainer" parent="."]
+[node name="도착지점_Scroll" type="ScrollContainer" parent="."]
 layout_mode = 2
+
+[node name="도착지점들" type="HBoxContainer" parent="도착지점_Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme = ExtResource("2_x1kds")
 
 [connection signal="value_changed" from="TopMenu/참가자수" to="." method="_on_참가자수_value_changed"]
