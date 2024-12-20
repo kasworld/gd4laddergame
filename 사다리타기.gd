@@ -31,7 +31,8 @@ func 사다리칸수() -> Vector2i:
 
 func 사다리간격() -> Vector2:
 	var 칸수 = 사다리칸수()
-	return Vector2($"사다리_Scroll/사다리들".size.x / 칸수.x, $"사다리_Scroll/사다리들".size.y / 칸수.y)
+	var 간격 = max($"사다리_Scroll/사다리들".size.x / 칸수.x , 최소간격폭)
+	return Vector2(간격, $"사다리_Scroll/사다리들".size.y / 칸수.y)
 
 func 세로줄위치(x :int, y :int)->Vector2:
 	var 간격 = 사다리간격()
@@ -98,6 +99,9 @@ func _ready() -> void:
 	var fsize = preload("res://사다리타기.tres").default_font_size
 	참가자수.init(0,"참가자수 ",fsize)
 	참가자수.set_limits(2,true,4,30,true)
+	$"참가자_Scroll".get_h_scroll_bar().scrolling.connect(_on_참가자_scroll_scroll_started)
+	$"도착지점_Scroll".get_h_scroll_bar().scrolling.connect(_on_도착지점_scroll_scroll_started)
+	$"사다리_Scroll".get_h_scroll_bar().scrolling.connect(_on_사다리_scroll_scroll_started)
 	참가자수변경()
 
 func 참가자수변경() -> void:
@@ -124,8 +128,7 @@ func 참가자수변경() -> void:
 	사다리풀이.visible = false
 	var 칸수 = 사다리칸수()
 	var 간격 = 사다리간격()
-	if 간격.x < 200 :
-		$"사다리_Scroll/사다리들".custom_minimum_size.x = 칸수.x * 최소간격폭
+	$"사다리_Scroll/사다리들".custom_minimum_size.x = 칸수.x * 최소간격폭
 	$"참가자_Scroll".custom_minimum_size.y = 참가자들.get_child(0).size.y *2 +10
 	$"도착지점_Scroll".custom_minimum_size.y = 도착지점들.get_child(0).size.y *2 +10
 
@@ -232,3 +235,16 @@ func _on_만들기단추_pressed() -> void:
 
 func _on_풀기단추_pressed() -> void:
 	사다리풀이그리기()
+
+
+func _on_참가자_scroll_scroll_started() -> void:
+	$"사다리_Scroll".scroll_horizontal = $"참가자_Scroll".scroll_horizontal
+	$"도착지점_Scroll".scroll_horizontal = $"참가자_Scroll".scroll_horizontal
+
+func _on_도착지점_scroll_scroll_started() -> void:
+	$"사다리_Scroll".scroll_horizontal = $"도착지점_Scroll".scroll_horizontal
+	$"참가자_Scroll".scroll_horizontal = $"도착지점_Scroll".scroll_horizontal
+
+func _on_사다리_scroll_scroll_started() -> void:
+	$"참가자_Scroll".scroll_horizontal = $"사다리_Scroll".scroll_horizontal
+	$"도착지점_Scroll".scroll_horizontal = $"사다리_Scroll".scroll_horizontal
