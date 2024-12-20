@@ -129,6 +129,9 @@ func 참가자수변경() -> void:
 	$"참가자_Scroll".custom_minimum_size.y = 참가자들.get_child(0).size.y *2 +10
 	$"도착지점_Scroll".custom_minimum_size.y = 도착지점들.get_child(0).size.y *2 +10
 
+	$"TopMenu/풀기단추".disabled = true
+	$"TopMenu/만들기단추".disabled = false
+
 func 사다리문제그리기() -> void:
 	사다리자료_만들기()
 	for i in 참가자들.get_child_count():
@@ -159,6 +162,8 @@ func 사다리문제그리기() -> void:
 
 	사다리문제.visible = true
 	사다리풀이.visible = false
+	$"TopMenu/풀기단추".disabled = false
+	$"TopMenu/만들기단추".disabled = true
 
 func 사다리풀이그리기() -> void:
 	var 칸수 = 사다리칸수()
