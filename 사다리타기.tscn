@@ -11,24 +11,24 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_8q3j2")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="TopMenu" type="HBoxContainer" parent="."]
 layout_mode = 2
 theme = ExtResource("2_x1kds")
 
-[node name="Label" type="Label" parent="HBoxContainer"]
+[node name="Label" type="Label" parent="TopMenu"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "사다리타기"
 
-[node name="참가자수" parent="HBoxContainer" instance=ExtResource("2_l0fvh")]
+[node name="참가자수" parent="TopMenu" instance=ExtResource("2_l0fvh")]
 layout_mode = 2
 theme = ExtResource("2_x1kds")
 
-[node name="만들기단추" type="Button" parent="HBoxContainer"]
+[node name="만들기단추" type="Button" parent="TopMenu"]
 layout_mode = 2
 text = "사다리만들기"
 
-[node name="풀기단추" type="Button" parent="HBoxContainer"]
+[node name="풀기단추" type="Button" parent="TopMenu"]
 layout_mode = 2
 text = "사다리타기"
 
@@ -36,20 +36,25 @@ text = "사다리타기"
 layout_mode = 2
 theme = ExtResource("2_x1kds")
 
-[node name="사다리들" type="PanelContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="문제" type="Control" parent="사다리들"]
+[node name="사다리들" type="PanelContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="문제" type="Control" parent="ScrollContainer/사다리들"]
 layout_mode = 2
 
-[node name="풀이" type="Control" parent="사다리들"]
+[node name="풀이" type="Control" parent="ScrollContainer/사다리들"]
 layout_mode = 2
 
 [node name="도착지점들" type="HBoxContainer" parent="."]
 layout_mode = 2
 theme = ExtResource("2_x1kds")
 
-[connection signal="value_changed" from="HBoxContainer/참가자수" to="." method="_on_참가자수_value_changed"]
-[connection signal="pressed" from="HBoxContainer/만들기단추" to="." method="_on_만들기단추_pressed"]
-[connection signal="pressed" from="HBoxContainer/풀기단추" to="." method="_on_풀기단추_pressed"]
+[connection signal="value_changed" from="TopMenu/참가자수" to="." method="_on_참가자수_value_changed"]
+[connection signal="pressed" from="TopMenu/만들기단추" to="." method="_on_만들기단추_pressed"]
+[connection signal="pressed" from="TopMenu/풀기단추" to="." method="_on_풀기단추_pressed"]

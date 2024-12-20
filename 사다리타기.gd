@@ -2,9 +2,11 @@ extends VBoxContainer
 
 var 화살표 = preload("res://arrow/arrow.tscn")
 
-@onready var 참가자수 = $"HBoxContainer/참가자수"
-@onready var 사다리문제 = $"사다리들/문제"
-@onready var 사다리풀이 = $"사다리들/풀이"
+@onready var 참가자수 = $"TopMenu/참가자수"
+@onready var 사다리문제 = $"ScrollContainer/사다리들/문제"
+@onready var 사다리풀이 = $"ScrollContainer/사다리들/풀이"
+@onready var 참가자들 = $"참가자들"
+@onready var 도착지점들 = $"도착지점들"
 
 class 사다리구성자료:
 	var 왼쪽연결길 :bool # 존재여부
@@ -81,33 +83,33 @@ func _ready() -> void:
 	var fsize = preload("res://사다리타기.tres").default_font_size
 	참가자수.init(0,"참가자수 ",fsize)
 	참가자수.set_limits(2,true,4,30,true)
-	$"참가자들".custom_minimum_size.y = 참가자수.size.y/2
-	$"도착지점들".custom_minimum_size.y = 참가자수.size.y/2
+	참가자들.custom_minimum_size.y = 참가자수.size.y/2
+	도착지점들.custom_minimum_size.y = 참가자수.size.y/2
 	참가자수변경()
 
 func 참가자수변경() -> void:
-	for n in $"참가자들".get_children():
-		$"참가자들".remove_child(n)
-	for n in $"도착지점들".get_children():
-		$"도착지점들".remove_child(n)
+	for n in 참가자들.get_children():
+		참가자들.remove_child(n)
+	for n in 도착지점들.get_children():
+		도착지점들.remove_child(n)
 	for i in 참가자수.get_value():
 		var 참가자 = TextEdit.new()
 		참가자.text = "출발%d" % [i+1]
 		참가자.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		$"참가자들".add_child(참가자)
+		참가자들.add_child(참가자)
 		var 도착지점 = TextEdit.new()
 		도착지점.text = "도착%d" % [i+1]
 		도착지점.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		$"도착지점들".add_child(도착지점)
+		도착지점들.add_child(도착지점)
 	사다리문제.visible = false
 	사다리풀이.visible = false
 
 func 사다리문제그리기() -> void:
 	사다리자료_만들기()
-	for i in $"참가자들".get_child_count():
-		$"참가자들".get_child(i).editable = false
-		$"도착지점들".get_child(i).editable = false
-		$"참가자들".get_child(i).modulate = 참가자색[i]
+	for i in 참가자들.get_child_count():
+		참가자들.get_child(i).editable = false
+		도착지점들.get_child(i).editable = false
+		참가자들.get_child(i).modulate = 참가자색[i]
 
 	for n in 사다리문제.get_children():
 		사다리문제.remove_child(n)
@@ -138,10 +140,10 @@ func 사다리풀이그리기() -> void:
 	var 간격 = 사다리간격()
 
 	for i in 칸수.x:
-		var s = $"도착지점들".get_child(참가자위치[i]).text
-		$"도착지점들".get_child(참가자위치[i]).text += "<-" + $"참가자들".get_child(i).text
-		$"참가자들".get_child(i).text += "->" + s
-		$"도착지점들".get_child(참가자위치[i]).modulate = 참가자색[i]
+		var s = 도착지점들.get_child(참가자위치[i]).text
+		도착지점들.get_child(참가자위치[i]).text += "<-" + 참가자들.get_child(i).text
+		참가자들.get_child(i).text += "->" + s
+		도착지점들.get_child(참가자위치[i]).modulate = 참가자색[i]
 
 	for n in 사다리풀이.get_children():
 		사다리풀이.remove_child(n)
@@ -197,7 +199,7 @@ func 사다리칸수() -> Vector2i:
 
 func 사다리간격() -> Vector2:
 	var 칸수 = 사다리칸수()
-	return Vector2($"사다리들".size.x / 칸수.x, $"사다리들".size.y / 칸수.y)
+	return Vector2($"ScrollContainer/사다리들".size.x / 칸수.x, $"ScrollContainer/사다리들".size.y / 칸수.y)
 
 func 세로줄위치(x :int, y :int)->Vector2:
 	var 간격 = 사다리간격()
