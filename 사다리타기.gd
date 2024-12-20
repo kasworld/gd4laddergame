@@ -225,6 +225,7 @@ func 사다리풀이그리기() -> void:
 
 	사다리문제.visible = false
 	사다리풀이.visible = true
+	$"TopMenu/풀기단추".disabled = true
 
 func _on_참가자수_value_changed(_idx: int) -> void:
 	참가자수변경()
