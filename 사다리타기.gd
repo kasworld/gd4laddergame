@@ -127,7 +127,6 @@ func 참가자수변경() -> void:
 	사다리문제.visible = false
 	사다리풀이.visible = false
 	var 칸수 = 사다리칸수()
-	var 간격 = 사다리간격()
 	$"사다리_Scroll/사다리들".custom_minimum_size.x = 칸수.x * 최소간격폭
 	$"참가자_Scroll".custom_minimum_size.y = 참가자들.get_child(0).size.y *2 +10
 	$"도착지점_Scroll".custom_minimum_size.y = 도착지점들.get_child(0).size.y *2 +10
