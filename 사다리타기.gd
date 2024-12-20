@@ -24,6 +24,21 @@ var 사다리자료 :Array
 var 참가자색 :PackedColorArray = []
 var 참가자위치 :Array = [] # [참가자] = 도착지
 
+func 사다리칸수() -> Vector2i:
+	return Vector2i(참가자수.get_value(), 참가자수.get_value()*4 )
+
+func 사다리간격() -> Vector2:
+	var 칸수 = 사다리칸수()
+	return Vector2($"ScrollContainer/사다리들".size.x / 칸수.x, $"ScrollContainer/사다리들".size.y / 칸수.y)
+
+func 세로줄위치(x :int, y :int)->Vector2:
+	var 간격 = 사다리간격()
+	return Vector2(x * 간격.x +간격.x/2, y * 간격.y)
+
+func 가로줄위치(x :int, y :int)->Vector2:
+	var 간격 = 사다리간격()
+	return Vector2(x * 간격.x +간격.x/2, y * 간격.y + 간격.y/2 )
+
 func 사다리자료_보기():
 	var 칸수 = 사다리칸수()
 	for y in 칸수.y:
@@ -76,8 +91,6 @@ func 사다리자료_만들기() -> void:
 				현재줄번호 = (현재줄번호+1) % 칸수.x
 				참가자위치[참가자번호] = 현재줄번호
 				continue
-
-	#사다리자료_보기()
 
 func _ready() -> void:
 	var fsize = preload("res://사다리타기.tres").default_font_size
@@ -193,21 +206,6 @@ func 사다리풀이그리기() -> void:
 
 	사다리문제.visible = false
 	사다리풀이.visible = true
-
-func 사다리칸수() -> Vector2i:
-	return Vector2i(참가자수.get_value(), 참가자수.get_value()*4 )
-
-func 사다리간격() -> Vector2:
-	var 칸수 = 사다리칸수()
-	return Vector2($"ScrollContainer/사다리들".size.x / 칸수.x, $"ScrollContainer/사다리들".size.y / 칸수.y)
-
-func 세로줄위치(x :int, y :int)->Vector2:
-	var 간격 = 사다리간격()
-	return Vector2(x * 간격.x +간격.x/2, y * 간격.y)
-
-func 가로줄위치(x :int, y :int)->Vector2:
-	var 간격 = 사다리간격()
-	return Vector2(x * 간격.x +간격.x/2, y * 간격.y + 간격.y/2 )
 
 func _on_참가자수_value_changed(_idx: int) -> void:
 	참가자수변경()
