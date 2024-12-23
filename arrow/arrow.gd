@@ -24,33 +24,26 @@ func make_arrow_bi(p1 :Vector2, p2 :Vector2, wing_size :float=1, wing_rotate :fl
 	add_wing_p1(p1,p2, wing_size, wing_rotate)
 
 func add_wing_p1(p1 :Vector2, p2 :Vector2, wing_size :float=1, wing_rotate :float = PI/6):
-	var w_vt = (p2-p1).normalized()*wing_size
-	var p3 = w_vt.rotated(wing_rotate) + p1
-	$P1_W1.points = [p1,p3]
-	var p4 = w_vt.rotated(-wing_rotate) + p1
-	$P1_W2.points = [p1,p4]
-	$P1_W1.visible = true
-	$P1_W2.visible = true
+	$Wing1.points = calc_wing_pos(p2,p1,wing_size,wing_rotate)
+	$Wing1.visible = true
 
 func add_wing_p2(p1 :Vector2, p2 :Vector2, wing_size :float=1, wing_rotate :float = PI/6):
+	$Wing2.points = calc_wing_pos(p1,p2,wing_size,wing_rotate)
+	$Wing2.visible = true
+
+# calc wing at p2 for line2d points
+func calc_wing_pos(p1 :Vector2, p2 :Vector2, wing_size :float=1, wing_rotate :float = PI/6) -> Array:
 	var w_vt = (p1-p2).normalized()*wing_size
 	var p3 = w_vt.rotated(wing_rotate) + p2
-	$P2_W1.points = [p2,p3]
 	var p4 = w_vt.rotated(-wing_rotate) + p2
-	$P2_W2.points = [p2,p4]
-	$P2_W1.visible = true
-	$P2_W2.visible = true
+	return [p3,p2,p4]
 
 func set_color(co :Color):
 	$CenterLine.default_color = co
-	$P2_W1.default_color = co
-	$P2_W2.default_color = co
-	$P1_W1.default_color = co
-	$P1_W2.default_color = co
+	$Wing2.default_color = co
+	$Wing1.default_color = co
 
 func set_width(w :float):
 	$CenterLine.width = w
-	$P2_W1.width = w
-	$P2_W2.width = w
-	$P1_W1.width = w
-	$P1_W2.width = w
+	$Wing2.width = w
+	$Wing1.width = w
