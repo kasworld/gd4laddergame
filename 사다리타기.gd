@@ -8,7 +8,7 @@ var 화살표 = preload("res://arrow/arrow.tscn")
 @onready var 참가자들 = $"참가자_Scroll/참가자들"
 @onready var 도착지점들 = $"도착지점_Scroll/도착지점들"
 
-const 최소간격폭 = 300
+const 최소간격 = Vector2(300,50)
 
 class 사다리구성자료:
 	var 왼쪽연결길 :bool # 존재여부
@@ -31,7 +31,7 @@ func 사다리칸수() -> Vector2i:
 
 func 사다리간격() -> Vector2:
 	var 칸수 = 사다리칸수()
-	var 간격 = max($"사다리_Scroll/사다리들".size.x / 칸수.x , 최소간격폭)
+	var 간격 = max($"사다리_Scroll/사다리들".size.x / 칸수.x , 최소간격.x)
 	return Vector2(간격, $"사다리_Scroll/사다리들".size.y / 칸수.y)
 
 func 세로줄위치(x :int, y :int)->Vector2:
@@ -115,19 +115,20 @@ func 참가자수변경() -> void:
 		참가자.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		참가자.size_flags_vertical = Control.SIZE_EXPAND
 		참가자.scroll_fit_content_height = true
-		참가자.custom_minimum_size.x = 최소간격폭
+		참가자.custom_minimum_size.x = 최소간격.x
 		참가자들.add_child(참가자)
 		var 도착지점 = TextEdit.new()
 		도착지점.text = "도착%d" % [i+1]
 		도착지점.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		도착지점.size_flags_vertical = Control.SIZE_EXPAND
 		도착지점.scroll_fit_content_height = true
-		도착지점.custom_minimum_size.x = 최소간격폭
+		도착지점.custom_minimum_size.x = 최소간격.x
 		도착지점들.add_child(도착지점)
 	사다리문제.visible = false
 	사다리풀이.visible = false
 	var 칸수 = 사다리칸수()
-	$"사다리_Scroll/사다리들".custom_minimum_size.x = 칸수.x * 최소간격폭
+	$"사다리_Scroll/사다리들".custom_minimum_size.x = 칸수.x * 최소간격.x
+	$"사다리_Scroll/사다리들".custom_minimum_size.y = 칸수.y * 최소간격.y
 	$"참가자_Scroll".custom_minimum_size.y = 참가자들.get_child(0).size.y *2 +10
 	$"도착지점_Scroll".custom_minimum_size.y = 도착지점들.get_child(0).size.y *2 +10
 
