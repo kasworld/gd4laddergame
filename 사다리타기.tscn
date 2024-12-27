@@ -23,6 +23,10 @@ text = "사다리타기"
 [node name="참가자수" parent="TopMenu" instance=ExtResource("2_l0fvh")]
 layout_mode = 2
 theme = ExtResource("2_x1kds")
+limit_low = 2
+use_limit_low = true
+init_value = 4
+use_limit_high = true
 
 [node name="만들기단추" type="Button" parent="TopMenu"]
 layout_mode = 2

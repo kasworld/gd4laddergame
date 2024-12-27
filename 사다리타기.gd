@@ -8,7 +8,7 @@ var 화살표 = preload("res://arrow/arrow.tscn")
 @onready var 참가자들 = $"참가자_Scroll/참가자들"
 @onready var 도착지점들 = $"도착지점_Scroll/도착지점들"
 
-const 최소간격 = Vector2(300,50)
+const 최소간격 = Vector2(200,50)
 
 class 사다리구성자료:
 	var 왼쪽연결길 :bool # 존재여부
@@ -101,7 +101,7 @@ func 사다리자료_만들기() -> void:
 func _ready() -> void:
 	var fsize = preload("res://사다리타기.tres").default_font_size
 	참가자수.init(0,"참가자수 ",fsize)
-	참가자수.set_limits(2,true,4,30,true)
+	#참가자수.set_limits(2,true,4,100,true)
 	$"참가자_Scroll".get_h_scroll_bar().scrolling.connect(_on_참가자_scroll_scroll_started)
 	$"도착지점_Scroll".get_h_scroll_bar().scrolling.connect(_on_도착지점_scroll_scroll_started)
 	$"사다리_Scroll".get_h_scroll_bar().scrolling.connect(_on_사다리_scroll_scroll_started)
@@ -184,8 +184,8 @@ func 사다리풀이그리기() -> void:
 	for n in 사다리풀이.get_children():
 		사다리풀이.remove_child(n)
 
-	var 화살표두께 = max(간격.x * 0.008, 1)
-	var 화살표날개길이 = max(간격.x * 0.05, 5)
+	var 화살표두께 = max(간격.x * 0.01, 2)
+	var 화살표날개길이 = max(간격.x * 0.1, 10)
 	var 화살표날개폭 = PI/9
 	var shift = Vector2(0, 화살표두께 *0.7)
 	var 세로위치보정 = Vector2(0,간격.y/2)
