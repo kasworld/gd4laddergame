@@ -183,14 +183,15 @@ func 사다리풀이그리기() -> void:
 
 	var 화살표두께 = max(간격.x * 0.01, 1)
 	var 화살표날개길이 = max(간격.x * 0.05, 5)
-	var shift = Vector2(0, 화살표두께 *2)
+	var shift = Vector2(0, 화살표두께 *1)
 	# 세로줄 그리기
 	for x in 칸수.x:
 		var 참가자번호 = x
 		var oldy = 0
+		var 세로줄 :Arrow
 		for y in 칸수.y:
+			세로줄 = 화살표.instantiate()
 			if 사다리자료[(x+1)%칸수.x][y].왼쪽가는길 >=0: # 오른쪽에서 들어옴
-				var 세로줄 = 화살표.instantiate()
 				세로줄.init_2_point(세로줄위치(x,oldy), 세로줄위치(x,y), 참가자색[참가자번호], 화살표두께, 화살표날개길이)
 				사다리풀이.add_child(세로줄)
 				oldy = y
@@ -198,14 +199,13 @@ func 사다리풀이그리기() -> void:
 				continue
 			if 사다리자료[(x-1+칸수.x)%칸수.x][y].오른쪽가는길 >=0: # 왼쪽에서 들어옴
 				# 현재까지를 그린다.
-				var 세로줄 = 화살표.instantiate()
 				세로줄.init_2_point(세로줄위치(x,oldy), 세로줄위치(x,y), 참가자색[참가자번호], 화살표두께, 화살표날개길이)
 				사다리풀이.add_child(세로줄)
 				oldy = y
 				참가자번호 = 사다리자료[(x-1+칸수.x)%칸수.x][y].오른쪽가는길
 				continue
 		# 나머지 끝까지 그린다.
-		var 세로줄 = 화살표.instantiate()
+		세로줄 = 화살표.instantiate()
 		세로줄.init_2_point(세로줄위치(x,oldy), 세로줄위치(x,칸수.y), 참가자색[참가자번호], 화살표두께, 화살표날개길이)
 		사다리풀이.add_child(세로줄)
 
