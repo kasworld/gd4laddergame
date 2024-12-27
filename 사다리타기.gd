@@ -23,8 +23,9 @@ class 사다리구성자료:
 
 # Array[참가자수][참가자수*4]사다리구성자료
 var 사다리자료 :Array
-var 참가자색 :PackedColorArray = []
-var 참가자위치 :Array = [] # [참가자] = 도착지
+var 참가자색 :PackedColorArray
+var 참가자위치 :Array # [참가자] = 도착지
+var 참가자별풀이이동좌표 :Array  # [참가자][vector2]
 
 func 사다리칸수() -> Vector2i:
 	return Vector2i(참가자수.get_value(), 참가자수.get_value()*3 )
@@ -56,11 +57,13 @@ func 사다리자료_만들기() -> void:
 	# 초기화
 	var 칸수 = 사다리칸수()
 	참가자색 = []
+	참가자별풀이이동좌표 = []
+	참가자위치 = []
+	사다리자료 = []
 	for i in 칸수.x:
 		참가자색.append(NamedColorList.color_list.pick_random()[0])
 		참가자위치.append(i)
-	사다리자료 = []
-	for i in 칸수.x:
+		참가자별풀이이동좌표.append([])
 		사다리자료.append([])
 		for j in 칸수.y:
 			사다리자료[i].append(사다리구성자료.new())
