@@ -36,6 +36,11 @@ text = "사다리만들기"
 layout_mode = 2
 text = "사다리타기"
 
+[node name="깜빡이기" type="CheckButton" parent="TopMenu"]
+layout_mode = 2
+disabled = true
+text = "깜빡이기"
+
 [node name="참가자_Scroll" type="ScrollContainer" parent="."]
 layout_mode = 2
 
@@ -69,6 +74,10 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("2_x1kds")
 
+[node name="Timer화살표깜빡이" type="Timer" parent="."]
+
 [connection signal="value_changed" from="TopMenu/참가자수" to="." method="_on_참가자수_value_changed"]
 [connection signal="pressed" from="TopMenu/만들기단추" to="." method="_on_만들기단추_pressed"]
 [connection signal="pressed" from="TopMenu/풀기단추" to="." method="_on_풀기단추_pressed"]
+[connection signal="toggled" from="TopMenu/깜빡이기" to="." method="_on_check_button_toggled"]
+[connection signal="timeout" from="Timer화살표깜빡이" to="." method="_on_timer화살표깜빡이_timeout"]

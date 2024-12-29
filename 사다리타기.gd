@@ -25,7 +25,7 @@ class 사다리구성자료:
 var 사다리자료 :Array
 var 참가자색 :PackedColorArray
 var 참가자위치 :Array # [참가자] = 도착지
-var 참가자별풀이이동좌표 :Array  # [참가자][vector2]
+var 풀이이동좌표 :Array  # [참가자][vector2]
 
 func 사다리칸수() -> Vector2i:
 	return Vector2i(참가자수.get_value(), 참가자수.get_value()*3 )
@@ -57,13 +57,13 @@ func 사다리자료_만들기() -> void:
 	# 초기화
 	var 칸수 = 사다리칸수()
 	참가자색 = []
-	참가자별풀이이동좌표 = []
+	풀이이동좌표 = []
 	참가자위치 = []
 	사다리자료 = []
 	for i in 칸수.x:
 		참가자색.append(NamedColorList.color_list.pick_random()[0])
 		참가자위치.append(i)
-		참가자별풀이이동좌표.append([])
+		풀이이동좌표.append([])
 		사다리자료.append([])
 		for j in 칸수.y:
 			사다리자료[i].append(사다리구성자료.new())
@@ -152,8 +152,8 @@ func 사다리문제그리기() -> void:
 
 	for x in 칸수.x:
 		var 세로줄 = Line2D.new()
-		세로줄.default_color = 참가자색[x]
-		세로줄.width = 간격.x/40
+		세로줄.default_color = Color.WHITE
+		세로줄.width = max(1,간격.x/100)
 		세로줄.points = [세로줄위치(x,0),세로줄위치(x,칸수.y)]
 		사다리문제.add_child(세로줄)
 
@@ -162,7 +162,7 @@ func 사다리문제그리기() -> void:
 			if 사다리자료[x%칸수.x][y].왼쪽연결길:
 				var 가로줄 = Line2D.new()
 				가로줄.default_color = Color.WHITE
-				가로줄.width = 간격.y/10
+				가로줄.width = max(1,간격.y/20)
 				가로줄.points = [가로줄위치(x,y), 가로줄위치(x-1,y)]
 				사다리문제.add_child(가로줄)
 
@@ -198,68 +198,70 @@ func 사다리풀이그리기() -> void:
 		# 아래로 내려가면서 좌우로 이동
 		var oldy = 0
 		# 시작 세로줄 그리기
-		참가자별풀이이동좌표[참가자번호].append_array([세로줄위치(현재줄번호,0), 가로줄위치(현재줄번호,0)])
+		풀이이동좌표[참가자번호].append_array([세로줄위치(현재줄번호,0), 가로줄위치(현재줄번호,0)])
 		for y in 칸수.y:
 			if 사다리자료[현재줄번호][y].왼쪽연결길 == true: # 왼쪽으로 한칸 이동
 				# 현재까지의 세로줄 그리기
-				참가자별풀이이동좌표[참가자번호].append_array([가로줄위치(현재줄번호,oldy), 가로줄위치(현재줄번호,y)])
+				풀이이동좌표[참가자번호].append_array([가로줄위치(현재줄번호,oldy), 가로줄위치(현재줄번호,y)])
 				#왼쪽 화살표
 				현재줄번호 -= 1
 				if 현재줄번호 < 0: # 절반 길이 화살표가 필요
 					# 가장 왼쪽
 					p1 = 가로줄위치(현재줄번호+1,y)-shift
 					p2 = 가로줄위치(현재줄번호,y)-shift
-					참가자별풀이이동좌표[참가자번호].append_array([p1, (p1+p2)/2])
+					풀이이동좌표[참가자번호].append_array([p1, (p1+p2)/2])
 					현재줄번호 += 칸수.x
 					# 가장 오른쪽
 					p1 = 가로줄위치(현재줄번호+1,y)-shift
 					p2 = 가로줄위치(현재줄번호,y)-shift
-					참가자별풀이이동좌표[참가자번호].append_array([(p1 + p2)/2, p2])
+					풀이이동좌표[참가자번호].append_array([(p1 + p2)/2, p2])
 				else :
-					참가자별풀이이동좌표[참가자번호].append_array([가로줄위치(현재줄번호+1,y)-shift, 가로줄위치(현재줄번호,y)-shift])
+					풀이이동좌표[참가자번호].append_array([가로줄위치(현재줄번호+1,y)-shift, 가로줄위치(현재줄번호,y)-shift])
 				oldy = y
 				continue
 			if 사다리자료[(현재줄번호+1)%칸수.x][y].왼쪽연결길 == true: # 오른쪽으로 한칸 이동
 				# 현재까지의 세로줄 그리기
-				참가자별풀이이동좌표[참가자번호].append_array([가로줄위치(현재줄번호,oldy), 가로줄위치(현재줄번호,y)])
+				풀이이동좌표[참가자번호].append_array([가로줄위치(현재줄번호,oldy), 가로줄위치(현재줄번호,y)])
 				# 오른쪽 화살표
 				현재줄번호 += 1
 				if 현재줄번호 >= 칸수.x: # 절반 길이 화살표가 필요
 					# 가장 오른쪽
 					p1 = 가로줄위치(현재줄번호-1,y)+shift
 					p2 = 가로줄위치(현재줄번호,y)+shift
-					참가자별풀이이동좌표[참가자번호].append_array([p1, (p1+p2)/2])
+					풀이이동좌표[참가자번호].append_array([p1, (p1+p2)/2])
 					현재줄번호 -= 칸수.x
 					# 가장 왼쪽
 					p1 = 가로줄위치(현재줄번호-1,y)+shift
 					p2 = 가로줄위치(현재줄번호,y)+shift
-					참가자별풀이이동좌표[참가자번호].append_array([(p1+p2)/2, p2])
+					풀이이동좌표[참가자번호].append_array([(p1+p2)/2, p2])
 				else:
-					참가자별풀이이동좌표[참가자번호].append_array([가로줄위치(현재줄번호-1,y)+shift, 가로줄위치(현재줄번호,y)+shift])
+					풀이이동좌표[참가자번호].append_array([가로줄위치(현재줄번호-1,y)+shift, 가로줄위치(현재줄번호,y)+shift])
 				oldy = y
 				continue
 		# 나머지 끝까지 그린다.
-		참가자별풀이이동좌표[참가자번호].append_array([가로줄위치(현재줄번호,oldy), 가로줄위치(현재줄번호,칸수.y)-세로위치보정])
+		풀이이동좌표[참가자번호].append_array([가로줄위치(현재줄번호,oldy), 가로줄위치(현재줄번호,칸수.y)-세로위치보정])
 
-	for 참가자번호 in 참가자별풀이이동좌표.size():
-		for i in 참가자별풀이이동좌표[참가자번호].size()/2:
-			p1 = 참가자별풀이이동좌표[참가자번호][i*2]
-			p2 = 참가자별풀이이동좌표[참가자번호][i*2+1]
+	for 참가자번호 in 풀이이동좌표.size():
+		for i in 풀이이동좌표[참가자번호].size()/2:
+			p1 = 풀이이동좌표[참가자번호][i*2]
+			p2 = 풀이이동좌표[참가자번호][i*2+1]
 			사다리풀이.add_child(
 				화살표.instantiate().init_2_point(p1, p2, 참가자색[참가자번호], 화살표두께, 화살표날개길이, 화살표날개폭) )
 
-	사다리문제.visible = false
+	#사다리문제.visible = false
 	사다리풀이.visible = true
 	$"TopMenu/풀기단추".disabled = true
 
 func _on_참가자수_value_changed(_idx: int) -> void:
 	참가자수변경()
+	$"TopMenu/깜빡이기".disabled = true
 
 func _on_만들기단추_pressed() -> void:
 	사다리문제그리기()
 
 func _on_풀기단추_pressed() -> void:
 	사다리풀이그리기()
+	$"TopMenu/깜빡이기".disabled = false
 
 func _on_참가자_scroll_scroll_started() -> void:
 	$"사다리_Scroll".scroll_horizontal = $"참가자_Scroll".scroll_horizontal
@@ -272,3 +274,25 @@ func _on_도착지점_scroll_scroll_started() -> void:
 func _on_사다리_scroll_scroll_started() -> void:
 	$"참가자_Scroll".scroll_horizontal = $"사다리_Scroll".scroll_horizontal
 	$"도착지점_Scroll".scroll_horizontal = $"사다리_Scroll".scroll_horizontal
+
+var 현재_깜빡이는_화살표순서 :int
+var 화살표_켤차례 :bool
+func 순서대로_화살표_깜빡이기() -> void:
+	사다리풀이.get_child(현재_깜빡이는_화살표순서).visible = 화살표_켤차례
+	현재_깜빡이는_화살표순서 += 1
+	if 현재_깜빡이는_화살표순서 >= 사다리풀이.get_child_count():
+		현재_깜빡이는_화살표순서 = 0
+		화살표_켤차례 = not 화살표_켤차례
+
+func _on_timer화살표깜빡이_timeout() -> void:
+	순서대로_화살표_깜빡이기()
+
+func _on_check_button_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		$"Timer화살표깜빡이".start(0.01)
+	else:
+		$"Timer화살표깜빡이".stop()
+		현재_깜빡이는_화살표순서 = 0
+		화살표_켤차례 = false
+		for n in 사다리풀이.get_children():
+			n.visible = true
