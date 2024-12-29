@@ -255,6 +255,7 @@ func 사다리풀이그리기() -> void:
 func _on_참가자수_value_changed(_idx: int) -> void:
 	참가자수변경()
 	$"TopMenu/깜빡이기".disabled = true
+	깜빡이재설정()
 
 func _on_만들기단추_pressed() -> void:
 	사다리문제그리기()
@@ -284,6 +285,12 @@ func 순서대로_화살표_깜빡이기() -> void:
 		현재_깜빡이는_화살표순서 = 0
 		화살표_켤차례 = not 화살표_켤차례
 
+func 깜빡이재설정() -> void:
+	$"Timer화살표깜빡이".stop()
+	현재_깜빡이는_화살표순서 = 0
+	화살표_켤차례 = false
+	$"TopMenu/깜빡이기".button_pressed = false
+
 func _on_timer화살표깜빡이_timeout() -> void:
 	순서대로_화살표_깜빡이기()
 
@@ -291,8 +298,6 @@ func _on_check_button_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		$"Timer화살표깜빡이".start(0.01)
 	else:
-		$"Timer화살표깜빡이".stop()
-		현재_깜빡이는_화살표순서 = 0
-		화살표_켤차례 = false
+		깜빡이재설정()
 		for n in 사다리풀이.get_children():
 			n.visible = true
