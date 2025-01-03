@@ -113,27 +113,27 @@ func 참가자수변경() -> void:
 	for n in 도착지점들.get_children():
 		도착지점들.remove_child(n)
 	for i in 참가자수.get_value():
-		var 참가자 = TextEdit.new()
+		var 참가자 = LineEdit.new()
 		참가자.text = "출발%d" % [i+1]
 		참가자.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		참가자.size_flags_vertical = Control.SIZE_EXPAND
-		참가자.scroll_fit_content_height = true
-		참가자.custom_minimum_size.x = 최소간격.x
+		#참가자.scroll_fit_content_height = true
+		#참가자.custom_minimum_size.x = 최소간격.x
 		참가자들.add_child(참가자)
-		var 도착지점 = TextEdit.new()
+		var 도착지점 = LineEdit.new()
 		도착지점.text = "도착%d" % [i+1]
 		도착지점.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		도착지점.size_flags_vertical = Control.SIZE_EXPAND
-		도착지점.scroll_fit_content_height = true
-		도착지점.custom_minimum_size.x = 최소간격.x
+		#도착지점.scroll_fit_content_height = true
+		#도착지점.custom_minimum_size.x = 최소간격.x
 		도착지점들.add_child(도착지점)
 	사다리문제.visible = false
 	사다리풀이.visible = false
 	var 칸수 = 사다리칸수()
 	$"사다리_Scroll/사다리들".custom_minimum_size.x = 칸수.x * 최소간격.x
 	$"사다리_Scroll/사다리들".custom_minimum_size.y = 칸수.y * 최소간격.y
-	$"참가자_Scroll".custom_minimum_size.y = 참가자들.get_child(0).size.y *2 +10
-	$"도착지점_Scroll".custom_minimum_size.y = 도착지점들.get_child(0).size.y *2 +10
+	$"참가자_Scroll".custom_minimum_size.y = 참가자들.get_child(0).size.y
+	$"도착지점_Scroll".custom_minimum_size.y = 도착지점들.get_child(0).size.y
 
 	$"TopMenu/풀기단추".disabled = true
 	$"TopMenu/만들기단추".disabled = false
