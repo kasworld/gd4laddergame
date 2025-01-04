@@ -117,15 +117,15 @@ func 참가자수변경() -> void:
 		참가자.text = "출발%d" % [i+1]
 		참가자.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		참가자.size_flags_vertical = Control.SIZE_EXPAND
-		#참가자.scroll_fit_content_height = true
-		#참가자.custom_minimum_size.x = 최소간격.x
+		참가자.add_theme_color_override("font_outline_color",Color.WHITE)
+		참가자.add_theme_constant_override("outline_size",1)
 		참가자들.add_child(참가자)
 		var 도착지점 = LineEdit.new()
 		도착지점.text = "도착%d" % [i+1]
 		도착지점.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		도착지점.size_flags_vertical = Control.SIZE_EXPAND
-		#도착지점.scroll_fit_content_height = true
-		#도착지점.custom_minimum_size.x = 최소간격.x
+		도착지점.add_theme_color_override("font_outline_color",Color.WHITE)
+		도착지점.add_theme_constant_override("outline_size",1)
 		도착지점들.add_child(도착지점)
 	사다리문제.visible = false
 	사다리풀이.visible = false
@@ -144,6 +144,7 @@ func 사다리문제그리기() -> void:
 		참가자들.get_child(i).editable = false
 		도착지점들.get_child(i).editable = false
 		참가자들.get_child(i).modulate = 참가자색[i]
+		#참가자들.get_child(i).add_theme_color_override("font_color",참가자색[i])
 
 	for n in 사다리문제.get_children():
 		사다리문제.remove_child(n)
@@ -180,6 +181,7 @@ func 사다리풀이그리기() -> void:
 		도착지점들.get_child(참가자위치[i]).text += "<-" + 참가자들.get_child(i).text
 		참가자들.get_child(i).text += "->" + s
 		도착지점들.get_child(참가자위치[i]).modulate = 참가자색[i]
+		#도착지점들.get_child(참가자위치[i]).add_theme_color_override("font_color",참가자색[i])
 
 	for n in 사다리풀이.get_children():
 		사다리풀이.remove_child(n)
