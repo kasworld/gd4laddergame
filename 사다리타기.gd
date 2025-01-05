@@ -56,12 +56,10 @@ func 사다리자료_보기():
 func 사다리자료_만들기() -> void:
 	# 초기화
 	var 칸수 = 사다리칸수()
-	참가자색 = []
 	풀이이동좌표 = []
 	참가자위치 = []
 	사다리자료 = []
 	for i in 칸수.x:
-		참가자색.append(NamedColorList.color_list.pick_random()[0])
 		참가자위치.append(i)
 		풀이이동좌표.append([])
 		사다리자료.append([])
@@ -108,15 +106,18 @@ func _ready() -> void:
 	참가자수변경()
 
 func 참가자수변경() -> void:
+	참가자색 = []
 	for n in 참가자들.get_children():
 		참가자들.remove_child(n)
 	for n in 도착지점들.get_children():
 		도착지점들.remove_child(n)
 	for i in 참가자수.get_value():
+		참가자색.append(NamedColorList.color_list.pick_random()[0])
 		var 참가자 = LineEdit.new()
 		참가자.text = "출발%d" % [i+1]
 		참가자.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		참가자.size_flags_vertical = Control.SIZE_EXPAND
+		참가자.add_theme_color_override("font_color",참가자색[i])
 		참가자.add_theme_color_override("font_outline_color",Color.WHITE)
 		참가자.add_theme_constant_override("outline_size",1)
 		참가자들.add_child(참가자)
@@ -124,6 +125,7 @@ func 참가자수변경() -> void:
 		도착지점.text = "도착%d" % [i+1]
 		도착지점.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		도착지점.size_flags_vertical = Control.SIZE_EXPAND
+		도착지점.add_theme_color_override("font_color",참가자색[i])
 		도착지점.add_theme_color_override("font_outline_color",Color.WHITE)
 		도착지점.add_theme_constant_override("outline_size",1)
 		도착지점들.add_child(도착지점)
@@ -141,10 +143,9 @@ func 참가자수변경() -> void:
 func 사다리문제그리기() -> void:
 	사다리자료_만들기()
 	for i in 참가자들.get_child_count():
+		참가자들.get_child(i).add_theme_color_override("font_uneditable_color", 참가자색[i])
 		참가자들.get_child(i).editable = false
 		도착지점들.get_child(i).editable = false
-		참가자들.get_child(i).modulate = 참가자색[i]
-		#참가자들.get_child(i).add_theme_color_override("font_color",참가자색[i])
 
 	for n in 사다리문제.get_children():
 		사다리문제.remove_child(n)
@@ -180,8 +181,7 @@ func 사다리풀이그리기() -> void:
 		var s = 도착지점들.get_child(참가자위치[i]).text
 		도착지점들.get_child(참가자위치[i]).text += "<-" + 참가자들.get_child(i).text
 		참가자들.get_child(i).text += "->" + s
-		도착지점들.get_child(참가자위치[i]).modulate = 참가자색[i]
-		#도착지점들.get_child(참가자위치[i]).add_theme_color_override("font_color",참가자색[i])
+		도착지점들.get_child(참가자위치[i]).add_theme_color_override("font_uneditable_color",참가자색[i])
 
 	for n in 사다리풀이.get_children():
 		사다리풀이.remove_child(n)
